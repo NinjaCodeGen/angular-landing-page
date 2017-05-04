@@ -1,0 +1,45 @@
+<div class="chat-view" [class.active]="!isMinizeChat">
+  <div class="chat-header">
+    <span (click)="isMinizeChat = true;" style="cursor: pointer;"><i class="fa fa-window-minimize"></i></span>
+    <span fxFlex></span>
+  </div>
+  <div #chatForm fxLayout="column" class="chat-container">
+    <!--<button (click)="login()" *ngIf="!name">Login With Github</button>-->
+    <div class="chat-content feed-message" *ngFor="let item of items | async">
+      <table style="width: 100%;">
+        <tr>
+          <td class="chat-msg-header">{{item.name}}</td>
+          <td style="text-align: right;">
+            <span *ngIf="item.timestamp">
+              {{toDate(item.timestamp) | date: 'MM/dd/yyyy @ h:mma'}}
+              </span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            {{item.message}}
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div id="newest-chat"></div>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+    <div fxFlex="65" fxFlexOffset="5">
+      <md-input-container fxFlex>
+        <input type="text" id="message" #chatInput (keyup.enter)="chatSend($event.target.value)" [(ngModel)]="msgVal" placeholder="message" mdInput />
+      </md-input-container>
+    </div>
+    <span fxFlex></span>
+    <div fxFlex="20">
+      <button (click)="chatSend(chatInput.value)" md-button md-raised-button color="warn">SEND!</button>
+    </div>
+    <span fxFlex></span>
+  </div>
+</div>
+
+<div class="chat-view border-radius" [class.active]="isMinizeChat">
+  <button md-icon-button (click)="isMinizeChat = false;">
+      <i class="fa fa-wechat"></i>
+  </button>
+</div>

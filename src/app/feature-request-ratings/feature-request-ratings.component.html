@@ -1,0 +1,152 @@
+<div #featureRating class="page-view feature-rating-background">
+  <div fxLayout="column" fxLayoutAlign="space-around center" class="inner-content">
+    <div class="title dark-color">
+      <span>Features Voting</span>
+      <span class="sub-title">
+        Please vote on which features you want to see next, or feel free to add it.<br/>
+        Just watching the animations itself is well-worth it, so give it a try!
+        <span *ngIf="!loggedInState || !loggedInState.uid"><br/><br/>You must login to GitHub for better results.<br/><br/>
+        <button (click)="login()" md-raised-button color="warn">LOGIN NOW!</button></span>
+      </span>
+    </div>
+    <div #featuresRatingList fxLayout="column" class="features-rating-view">
+      <!--FEATURE REQUEST RATINGS-->
+      <div fxLayout="row">
+        <div class="feature-table-outer" fxFlex="80" fxFlexOffset="10">
+          <table *ngIf="featureRequests" cellspacing="0">
+            <thead style="font-weight: bold;">
+              <td colspan="2">Delete</td>
+              <td>Name</td>
+              <td>Description</td>
+              <td>Rating</td>
+              <td>Votes</td>
+              <td>Rate</td>
+            </thead>
+            <tr *ngFor="let featureRequest of featureRequests | async | orderBy: ['-avgRating', '-name']" [@itemAnim]>
+              <td>
+                <!--<button (click)="updateFeatureRequest(featureRequest)" md-mini-fab="" [disabled]="loggedInState?.uid != featureRequest.creatorUid"><md-icon>check</md-icon></button>-->
+              </td>
+              <td>
+                <button (click)="deleteFeatureRequest(featureRequest)" md-mini-fab="" [disabled]="loggedInState?.uid != featureRequest.creatorUid"><md-icon>clear</md-icon></button>
+                <!--delete cancel remove circle clear-->
+              </td>
+              <td>
+                <span *ngIf="loggedInState?.uid != featureRequest.creatorUid">{{featureRequest.name}}</span>
+                <span *ngIf="loggedInState?.uid == featureRequest.creatorUid">{{featureRequest.name}}</span>
+                <!--<md-input-container class="example-full-width" *ngIf="loggedInState?.uid == featureRequest.creatorUid">
+                  <input type="text" [(ngModel)]="featureRequest.name" placeholder="name" mdInput />
+                </md-input-container>-->
+              </td>
+              <td>
+                <span *ngIf="loggedInState?.uid != featureRequest.creatorUid">{{featureRequest.desc?.substring(0, 300)}}
+                  <span *ngIf="featureRequest.desc?.length > 300" mdTooltip="{{featureRequest.desc}}">...</span>
+                </span>
+                <span *ngIf="loggedInState?.uid == featureRequest.creatorUid">{{featureRequest.desc?.substring(0, 300)}}
+                  <span *ngIf="featureRequest.desc?.length > 300" mdTooltip="{{featureRequest.desc}}">...</span>
+                </span>
+                <!--<md-input-container class="example-full-width" *ngIf="loggedInState?.uid == featureRequest.creatorUid">
+                  <input type="text" [(ngModel)]="featureRequest.desc" placeholder="description" mdInput />
+                </md-input-container>-->
+              </td>
+              <td>
+                {{ featureRequest.avgRating | number : '1.2-2' }}
+                <!--<md-input-container class="example-full-width">
+              <input type="number" [(ngModel)]="featureRequest.avgRating" placeholder="average rating" mdInput />
+            </md-input-container>-->
+              </td>
+              <td>
+                {{featureRequest.numberOfRatings}}
+              </td>
+              <td>
+                <button (click)="addMyRating(featureRequest, 1)" md-mini-fab [disabled]="!loggedInState || myFFRObject && myFFRObject[featureRequest.$key]?.value == 1">1</button>
+                <button (click)="addMyRating(featureRequest, 2)" md-mini-fab color="primary" [disabled]="!loggedInState || myFFRObject && myFFRObject[featureRequest.$key]?.value == 2">2</button>
+                <button (click)="addMyRating(featureRequest, 3)" md-mini-fab [disabled]="!loggedInState || myFFRObject && myFFRObject[featureRequest.$key]?.value == 3">3</button>
+                <button (click)="addMyRating(featureRequest, 4)" md-mini-fab color="primary" [disabled]="!loggedInState || myFFRObject && myFFRObject[featureRequest.$key]?.value == 4">4</button>
+                <button (click)="addMyRating(featureRequest, 5)" md-mini-fab [disabled]="!loggedInState || myFFRObject && myFFRObject[featureRequest.$key]?.value == 5">5</button>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center center" style="margin: 10px 0 0 0;">
+        <div fxFlex="30" fxFlexOffset="10">
+          <md-input-container fxFlex>
+            <input type="text" [(ngModel)]="newFeatureRequest.name" placeholder="name" mdInput />
+          </md-input-container>
+        </div>
+        <div fxFlex="30">
+          <md-input-container fxFlex>
+            <input type="text" [(ngModel)]="newFeatureRequest.desc" placeholder="description" mdInput />
+          </md-input-container>
+        </div>
+        <div fxFlex="20">
+          <button (click)="addFeatureRequest()" md-raised-button color="warn">ADD!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br/>
+</div>
+
+<div id="newsletter" #contactView class="page-view feature-rating-background" style="margin: 20px 0 0 0;">
+  <div fxLayout="column" fxLayoutAlign="center center" class="inner-content">
+    <div class="title dark-color">
+      <span>Newsletter</span>
+      <span class="sub-title">Sign up for updates!</span>
+    </div>
+    <div #featuresRatingList fxLayout="column" class="features-contact-view">
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <div fxFlex="40" fxFlexOffset="20">
+          <md-input-container fxFlex>
+            <input type="text" [(ngModel)]="emailForNewsletter" placeholder="email" mdInput />
+          </md-input-container>
+        </div>
+        <div fxFlex="20">
+          <button (click)="signUpNewsletter()" md-raised-button color="warn">SIGN UP!</button>
+          <br/>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br/>
+</div>
+
+<!--
+  <br><br><br>
+  <h1>{{ item | async | json }}</h1>
+  <input type="text" #newname placeholder="Name" />
+  <input type="text" #newsize placeholder="Size" />
+  <br />
+  <button (click)="save(newname.value)">Set Name</button>
+  <button (click)="update(newsize.value)">Update Size</button>
+  <button (click)="delete()">Delete</button> list-->
+<!--FIREBASE: item
+<h1>{{ (item | async)?.name }}</h1>
+
+  <h1>{{ item | async | json }}</h1>
+  <input type="text" #newname placeholder="Name" />
+  <input type="text" #newsize placeholder="Size" />
+  <br />
+  <button (click)="save(newname.value)">Set Name</button>
+  <button (click)="update(newsize.value)">Update Size</button>
+  <button (click)="delete()">Delete</button> list
+
+  <ul>
+    <li *ngFor="let item of items | async">
+      {{ item | json }}
+    </li>
+  </ul>
+
+  <ul>
+    <li *ngFor="let item of items | async">
+      <input type="text" #updatetext [value]="item.text" />
+      <button (click)="updateItem(item.$key, updatetext.value)">Update</button>
+      <button (click)="deleteItem(item.$key)">Delete</button>
+    </li>
+  </ul>
+  <input type="text" #newitem />
+  <button (click)="addItem(newitem.value)">Add</button>
+  <button (click)="deleteEverything()">Delete All</button>
+
+  <br/>
+  <br/>-->

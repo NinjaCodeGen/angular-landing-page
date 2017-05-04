@@ -1,0 +1,17 @@
+<div #feature class="page-view">
+  <div fxLayout="column" fxLayoutAlign="space-around center" class="inner-content">
+    <div class="title dark-color">
+      <span>Features</span>
+    </div>
+    <div #featuresList fxLayout="column" fxLayoutAlign="space-around center" class="features-view">
+      <ul class="featurelist">
+        <li *ngFor="let feature of features">
+          <div class="feature-title">
+            <i class="fa fa-chevron-right"></i> {{feature.name}}
+          </div>
+          <div class="feature-content">{{feature.desc}}</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

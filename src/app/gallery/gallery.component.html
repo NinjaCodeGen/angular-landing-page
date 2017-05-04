@@ -1,0 +1,20 @@
+<div #galerry class="page-view gallery-background">
+  <div fxLayout="column" fxLayoutAlign="space-around center" class="inner-content">
+    <div class="title dark-color">
+      <span>Gallery</span>
+    </div>
+    <div #galleryItems fxLayout="row" fxLayoutAlign="space-around center" class="gallery-items-view">
+      <ng-template ngFor let-templateSet [ngForOf]="templateSets">
+        <div class="showcase">
+          <div class="img-item">
+            <img src="{{templateSet.imgUrl}}" />
+          </div>
+          <div class="item-title">
+            {{templateSet.name}}
+          </div>
+          <a md-button href="{{templateSet.url}}" target="_blank">See sample site</a>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>
