@@ -2,10 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { Feature } from './feature';
 
-import {
-  AngularFire, AuthProviders,
-  FirebaseAuthState, FirebaseListObservable, FirebaseObjectObservable
-} from 'angularfire2';
+import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
 
 @Component({
   selector: 'ncg-features',
@@ -15,7 +12,7 @@ export class FeaturesComponent implements OnInit {
   features: Feature[];
   featuresObservable: FirebaseListObservable<Feature[]>;
 
-  constructor(public af: AngularFire) { }
+  constructor(public db: AngularFireDatabase) { }
 
   ngOnInit() {
     this.features =
@@ -63,7 +60,7 @@ export class FeaturesComponent implements OnInit {
       ];
 
 
-      this.featuresObservable = this.af.database.list("/features");
+      this.featuresObservable = this.db.list("/features");
 
       // init
       // this.features.forEach(

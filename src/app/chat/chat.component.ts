@@ -1,9 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import {
-  AngularFire, AuthProviders,
-  FirebaseAuthState, FirebaseListObservable, FirebaseObjectObservable
-} from 'angularfire2';
+import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 import * as firebase from 'firebase';
 
@@ -19,17 +17,17 @@ export class ChatComponent implements OnInit {
   msgVal: string = '';
   isMinizeChat = true;
 
-  constructor(public af: AngularFire) {
+  constructor(public db: AngularFireDatabase, public auth: AngularFireAuth) {
   }
 
   ngOnInit() {
-    this.items = this.af.database.list('/messages', {
+    this.items = this.db.list('/messages', {
       query: {
         limitToLast: 30
       }
     });
 
-    this.af.auth.subscribe(auth => {
+    this.auth.authState.subscribe(auth => {
       if (auth) {
         this.name = auth;
          this.isMinizeChat = false;
@@ -54,19 +52,6 @@ export class ChatComponent implements OnInit {
 
     this.items.push({ message, name, timestamp: firebase.database['ServerValue']['TIMESTAMP'] });
     this.msgVal = '';
-  }
-
-  login() {
-    this.af.auth.login()
-      .then(result => {
-       
-        // console.log('success');
-        // console.log(result);
-      })
-      .catch(result => {
-        // console.log('failure');
-        // console.log(result);
-      });
   }
 
   toDate(timestamp) {

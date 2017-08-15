@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AngularFire, AuthProviders, FirebaseAuthState, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2';
+import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
 import { TemplateSet } from './template-set';
 import { GlobalService } from './../shared';
 
@@ -13,7 +13,7 @@ export class GalleryComponent implements OnInit {
   templateSets: TemplateSet[];
   templateSetsObservable: FirebaseListObservable<TemplateSet[]>;
 
-  constructor(public af: AngularFire, public gbs: GlobalService) { }
+  constructor(public db: AngularFireDatabase, public gbs: GlobalService) { }
 
   ngOnInit() {
     // this.gbs.setStyle(this.galleryItemsElement, 'height', window.innerHeight + 'px');
@@ -61,7 +61,7 @@ export class GalleryComponent implements OnInit {
 
     // imgUrl: 'https://cdn-images-1.medium.com/max/800/1*Zl0lsY09eO5y-mnYO18gUg.png',
 
-    this.templateSetsObservable = this.af.database.list("/template-sets");
+    this.templateSetsObservable = this.db.list("/template-sets");
 
     // init
     // this.templateSets.forEach(

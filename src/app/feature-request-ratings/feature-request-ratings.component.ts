@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { keyframes, trigger, state, style, transition, animate, group } from '@angular/animations';
-import { AngularFire, AuthProviders, FirebaseAuthState, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2';
+import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
+import { AngularFireAuth } from 'angularfire2/auth';
 import { MdSnackBar } from '@angular/material';
 
 import { Subject } from 'rxjs/Subject';
@@ -8,6 +9,8 @@ import { Subject } from 'rxjs/Subject';
 import { FeatureRequest } from './feature-request';
 import { Rating } from './rating';
 import { User } from './user';
+
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'ncg-feature-request-ratings',
@@ -18,8 +21,8 @@ import { User } from './user';
       transition('void => *', [
         animate(700, keyframes([
           style({ opacity: 0, transform: 'translateX(-100%)', offset: 0 }),
-          style({ opacity: 1, transform: 'translateX(15px)', offset: 1.0 }),
-          style({ opacity: 1, transform: 'translateX(0)', offset: 1.7 })
+          style({ opacity: 1, transform: 'translateX(15px)', offset: .5 }),
+          style({ opacity: 1, transform: 'translateX(0)', offset: 1 })
         ]))
       ]),
       transition('* => void', [
@@ -33,7 +36,7 @@ import { User } from './user';
   ]
 })
 export class FeatureRequestRatingsComponent implements OnInit {
-  loggedInState: FirebaseAuthState;
+  loggedInState: firebase.User;
   myFeatureRequestRatings: FirebaseListObservable<FeatureRequest[]>;
   myFFRObject: any;
   myFFRObjectObservable: any;
@@ -57,13 +60,13 @@ export class FeatureRequestRatingsComponent implements OnInit {
   features: FirebaseListObservable<any[]>;
   featureItem: any = {};
 
-  constructor(public af: AngularFire, public snackBar: MdSnackBar) {
+  constructor(public db: AngularFireDatabase, public auth: AngularFireAuth, public snackBar: MdSnackBar) {
 
   }
 
   ngOnInit() {
-    this.featureRequests = this.af.database.list('/feature-requests');
-    this.myRatings = this.af.database.list('/user-ratings', {
+    this.featureRequests = this.db.list('/feature-requests');
+    this.myRatings = this.db.list('/user-ratings', {
       query: {
         orderByChild: 'uid',
         equalTo: this.uidSubject
@@ -72,21 +75,21 @@ export class FeatureRequestRatingsComponent implements OnInit {
     });
 
 
-    this.af.auth.subscribe(result => {
+    this.auth.authState.subscribe(result => {
       this.loggedInState = result;
       if (result) {
         this.loggedInUid = result.uid;
-        this.emailForNewsletter = result.auth.email;
+        this.emailForNewsletter = result.email;
         // this.uidSubject.next(this.loggedInUid);
 
-        this.myFeatureRequestRatings = this.af.database.list("/user-feature-request-ratings/" + this.loggedInUid);
+        this.myFeatureRequestRatings = this.db.list("/user-feature-request-ratings/" + this.loggedInUid);
         this.myFeatureRequestRatings.subscribe(snapshot => {
           this.myFRRSnapshot = snapshot;
           console.log(snapshot);
         });
 
 
-        this.myFFRObjectObservable = this.af.database.object("/user-feature-request-ratings/" + this.loggedInUid);
+        this.myFFRObjectObservable = this.db.object("/user-feature-request-ratings/" + this.loggedInUid);
         this.myFFRObjectObservable.subscribe(snapshot => {
           this.myFFRObject = snapshot;
           console.log(snapshot);
@@ -108,12 +111,12 @@ export class FeatureRequestRatingsComponent implements OnInit {
     // const relative = af.database.object('/item');
     // // absolute URL
     // const absolute = af.database.object('https://<your-app>.firebaseio.com/item');
-    this.items = this.af.database.list('/messages');
-    this.item = this.af.database.object('/item', { preserveSnapshot: true });
-    this.item2 = this.af.database.object('/item');
+    this.items = this.db.list('/messages');
+    this.item = this.db.object('/item', { preserveSnapshot: true });
+    this.item2 = this.db.object('/item');
 
     this.sizeSubject = new Subject();
-    this.features = this.af.database.list('/features', {
+    this.features = this.db.list('/features', {
       query: {
         orderByChild: 'avgRating',
         // equalTo: this.sizeSubject
@@ -197,10 +200,10 @@ export class FeatureRequestRatingsComponent implements OnInit {
     this.featureRequests.remove(featureRequest.$key);
   }
 
-  addMyRating(featureRequest: FeatureRequest, // FeatureRequest, 
+  addMyRating(featureRequest: FeatureRequest, // FeatureRequest,
     ratingValue: number) {
 
-    // need to add to 
+    // need to add to
     let newRating = new Rating(this.loggedInUid, (<any>featureRequest).$key, ratingValue);
 
     // 1. feature-requests - featureRequest.ratings collection
@@ -245,7 +248,7 @@ export class FeatureRequestRatingsComponent implements OnInit {
   // }
 
   login() {
-    this.af.auth.login()
+    this.auth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider())
       .then(result => {
         console.log('success');
         console.log(result);
@@ -257,11 +260,11 @@ export class FeatureRequestRatingsComponent implements OnInit {
   }
 
   logout() {
-    this.af.auth.logout();
+    this.auth.auth.signOut();
   }
 
   signUpNewsletter() {
-    let emails = this.af.database.list('/emails');
+    let emails = this.db.list('/emails');
     emails.push(this.emailForNewsletter).then(
       r => {
         this.snackBar.open('Sign up successful!', 'GLHF!', { duration: 2000 });
