@@ -18,7 +18,7 @@ export class FeaturesComponent implements OnInit {
     this.features =
       [
         {
-          name: 'Angular Code Generator',
+          name: 'Angular CRUD Code Generator',
           desc: 'Download full source code for apps based on your schema in seconds. For enterprise teams, create your own template-sets and push directly to your local machine/environment for quick development.',
           url: 'http://ncg-test-ncg-ng-md.azurewebsites.net',
           imgUrl: 'https://cdn-images-1.medium.com/max/800/1*Zl0lsY09eO5y-mnYO18gUg.png',

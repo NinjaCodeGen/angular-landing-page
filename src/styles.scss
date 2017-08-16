@@ -24,10 +24,16 @@ body {
 }
 
 .navbar {
+  align-items: center;
   background: transparent;
   color: white;
+  font-size: 20px;
+    font-weight: 500;
+    font-family: Roboto,"Helvetica Neue",sans-serif;
+    padding: 0 16px;
   position: fixed;
   transition: background 0.5s linear;
+  width: 100%;
   z-index: 999;
   &.nav-transform {
     background: #ee1933;
