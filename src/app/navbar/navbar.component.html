@@ -1,8 +1,8 @@
 <!--color="primary"-->
-<md-toolbar #navbar class="navbar" [class.nav-transform]="navIsOvered">
+<md-toolbar #navbar class="navbar" id="navbar">
   <a href="http://NinjaCodeGen.com">
     <img fxHide fxShow.gt-md src="assets/ncg-logo-glowsticks2.png" style="height:50px; margin: 3px 5px 0px 5px;" />
-    <img fxShow fxHide.gt-md src="assets/ncg-logo-glowsticks2.png" style="height:20px; margin: 3px 5px 0px 5px;" />    
+    <img fxShow fxHide.gt-md src="assets/ncg-logo-glowsticks2.png" style="height:20px; margin: 3px 5px 0px 5px;" />
   </a>
   <span fxHide fxShow.gt-md>NinjaCodeGen</span>
   <div fxFlex>
@@ -30,23 +30,23 @@
       <a md-button href="#ratings">Feature 2</a>-->
       <span fxFlex></span>
       <div class="nav-login">
-        <span *ngIf="auth.loggedInState" class="display-name">{{ auth.loggedInState.auth.displayName }}</span>
+        <span *ngIf="auth.loggedInState" class="display-name">{{ auth.loggedInState.displayName }}</span>
         <button class="login-button" md-icon-button [mdMenuTriggerFor]="themeMenu">
-          <img *ngIf="auth.loggedInState" class="display-avatar" src="{{ auth.loggedInState.auth.photoURL }}" />          
+          <img *ngIf="auth.loggedInState" class="display-avatar" src="{{ auth.loggedInState.photoURL }}" />
           <md-icon *ngIf="!auth.loggedInState">account_circle</md-icon>
         </button>
       </div>
       <md-menu #themeMenu x-position="before" [overlapTrigger]="false">
-        <span *ngIf="auth.loggedInState"> 
+        <span *ngIf="auth.loggedInState">
           <button md-menu-item>
-            <md-icon class="fa fa-address-book"></md-icon>{{ auth.loggedInState.auth.email }}
+            <md-icon class="fa fa-address-book"></md-icon>{{ auth.loggedInState.email }}
           </button>
           <hr />
           <button md-menu-item (click)="auth.logout()">
             <md-icon class="fa fa-sign-out"></md-icon>Logout
           </button>
         </span>
-        <span *ngIf="!auth.loggedInState">        
+        <span *ngIf="!auth.loggedInState">
           <button md-menu-item (click)="auth.login()">
             <md-icon class="fa fa-sign-in"></md-icon>Login to GitHub
           </button>

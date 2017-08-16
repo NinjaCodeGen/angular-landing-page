@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { AngularFire, AuthProviders, FirebaseAuthState } from 'angularfire2';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 @Injectable()
 export class AuthService {
-  public loggedInState: FirebaseAuthState;
+  public loggedInState: firebase.User;
   public loggedInUid: string;
 
-  constructor(public af: AngularFire) {
-    this.af.auth.subscribe(result => {
+  constructor(public auth: AngularFireAuth) {
+    this.auth.authState.subscribe(result => {
       this.loggedInState = result;
       if (result) {
         this.loggedInUid = result.uid;
@@ -16,7 +16,7 @@ export class AuthService {
   }
 
   public login() {
-    this.af.auth.login()
+    this.auth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider())
       .then(result => {
         console.log('success');
         console.log(result);
@@ -28,6 +28,6 @@ export class AuthService {
   }
 
   public logout() {
-    this.af.auth.logout();
+    this.auth.auth.signOut();
   }
 }

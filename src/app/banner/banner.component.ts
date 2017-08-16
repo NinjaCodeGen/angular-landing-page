@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AngularFire, AuthProviders, FirebaseAuthState, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2';
+import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
 import { Banner } from './banner';
 
 import { GlobalService } from './../shared';
@@ -15,7 +15,7 @@ export class BannerComponent implements OnInit {
   bannersObservable: FirebaseListObservable<Banner[]>;
 
   banners = [];
-  constructor(public af: AngularFire, public gbs: GlobalService) {
+  constructor(public db: AngularFireDatabase, public gbs: GlobalService) {
   }
 
   ngOnInit() {
@@ -34,7 +34,7 @@ export class BannerComponent implements OnInit {
         }
       ];
 
-    this.bannersObservable = this.af.database.list("/banners");
+    this.bannersObservable = this.db.list("/banners");
 
     // init
     // this.banners.forEach(
