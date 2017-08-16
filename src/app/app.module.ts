@@ -23,7 +23,9 @@ import { Ng2PageScrollModule } from 'ng2-page-scroll';
 
 import { AngularFireModule } from 'angularfire2';
 import { AppComponent } from './app.component';
-import { OrderBy } from './pipes/order-by.pipe';
+import { OrderByPipe } from './pipes/order-by.pipe';
+import { OrderModule } from 'ngx-order-pipe';
+
 import { FeatureRequestRatingsComponent } from './feature-request-ratings/feature-request-ratings.component';
 
 import { NavbarComponent } from './navbar/navbar.component';
@@ -53,7 +55,7 @@ export const firebaseConfig = {
 @NgModule({
   declarations: [
     AppComponent,
-    OrderBy,
+    OrderByPipe,
     FeatureRequestRatingsComponent,
     NavbarComponent,
     // TestComponent,

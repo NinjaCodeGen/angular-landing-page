@@ -22,7 +22,8 @@
               <td>Votes</td>
               <td>Rate</td>
             </thead>
-            <tr *ngFor="let featureRequest of featureRequests | async | orderBy: ['-avgRating', '-name']" [@itemAnim]>
+            <tr *ngFor="let featureRequest of featureRequests | async | orderBy: ['-avgRating', 'name']" [@itemAnim]>
+              <!-- <tr *ngFor="let featureRequest of featureRequests | async | orderBy: 'calculatedOrder' : true" [@itemAnim]> -->
               <td>
                 <!--<button (click)="updateFeatureRequest(featureRequest)" md-mini-fab="" [disabled]="loggedInState?.uid != featureRequest.creatorUid"><md-icon>check</md-icon></button>-->
               </td>

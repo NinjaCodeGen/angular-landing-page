@@ -8,7 +8,7 @@ import { AuthService } from './../shared';
   templateUrl: './navbar.component.html'
 })
 export class NavbarComponent {
-  public navIsOvered = false;
+
   public myEasing: EasingLogic = {
     ease: (t: number, b: number, c: number, d: number): number => {
       // easeInOutExpo easing
