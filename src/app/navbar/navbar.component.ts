@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, NgZone } from '@angular/core';
 import { DOCUMENT } from '@angular/platform-browser';
-import { EasingLogic } from 'ng2-page-scroll'
+import { EasingLogic } from 'ng2-page-scroll';
 import { AuthService } from './../shared';
 
 @Component({
@@ -29,7 +29,7 @@ export class NavbarComponent {
     zone.runOutsideAngular(() => {
       window.addEventListener('scroll', () => {
         const number = Math.min(this.document.body.scrollTop / 50, 1);
-        document.getElementById('navbar').style.background = `rgba(238,25,51,${number}`;
+        document.getElementById('navbar').style.background = `rgba(238,25,51,${number})`;
       });
     });
   }

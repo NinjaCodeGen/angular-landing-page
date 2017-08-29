@@ -3,7 +3,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
 
-import * as firebase from 'firebase';
+// import * as firebase from 'firebase';
+declare var firebase: any;
 
 @Component({
   selector: 'ncg-chat',
@@ -17,7 +18,7 @@ export class ChatComponent implements OnInit {
   msgVal: string = '';
   isMinizeChat = true;
 
-  constructor(public db: AngularFireDatabase, public auth: AngularFireAuth) {
+  constructor(public db: AngularFireDatabase, public afAuth: AngularFireAuth) {
   }
 
   ngOnInit() {
@@ -27,7 +28,7 @@ export class ChatComponent implements OnInit {
       }
     });
 
-    this.auth.authState.subscribe(auth => {
+    this.afAuth.authState.subscribe(auth => {
       if (auth) {
         this.name = auth;
          this.isMinizeChat = false;

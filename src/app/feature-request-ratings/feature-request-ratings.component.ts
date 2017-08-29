@@ -12,6 +12,8 @@ import { User } from './user';
 
 import { Observable } from 'rxjs/Observable';
 
+import * as firebase from 'firebase/app';
+
 @Component({
   selector: 'ncg-feature-request-ratings',
   templateUrl: './feature-request-ratings.component.html',
@@ -60,7 +62,7 @@ export class FeatureRequestRatingsComponent implements OnInit {
   features: FirebaseListObservable<any[]>;
   featureItem: any = {};
 
-  constructor(public db: AngularFireDatabase, public auth: AngularFireAuth, public snackBar: MdSnackBar) {
+  constructor(public db: AngularFireDatabase, public afAuth: AngularFireAuth, public snackBar: MdSnackBar) {
 
   }
 
@@ -75,7 +77,7 @@ export class FeatureRequestRatingsComponent implements OnInit {
     });
 
 
-    this.auth.authState.subscribe(result => {
+    this.afAuth.authState.subscribe(result => {
       this.loggedInState = result;
       if (result) {
         this.loggedInUid = result.uid;
@@ -248,7 +250,7 @@ export class FeatureRequestRatingsComponent implements OnInit {
   // }
 
   login() {
-    this.auth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider())
+    this.afAuth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider())
       .then(result => {
         console.log('success');
         console.log(result);
@@ -260,7 +262,7 @@ export class FeatureRequestRatingsComponent implements OnInit {
   }
 
   logout() {
-    this.auth.auth.signOut();
+    this.afAuth.auth.signOut();
   }
 
   signUpNewsletter() {
